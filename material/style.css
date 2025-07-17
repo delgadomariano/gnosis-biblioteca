@@ -1,0 +1,259 @@
+/* Colores base */
+:root {
+    --primary: #3f51b5;
+    --secondary: #ff4081;
+    --bg-light: #f8f9fa;
+    --text-dark: #333;
+}
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 14px;
+    background-color: #ccc;
+    color: var(--text-dark);
+    line-height: 1.4;
+}
+
+/* Enlaces */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Navbar */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-light);
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.menu {
+    display: flex;
+    gap: 10px;
+}
+
+.menu-link {
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.menu-link:hover {
+    background: #e2e6ea;
+}
+
+.menu-toggle {
+    font-size: 1.5rem;
+    display: none;
+    cursor: pointer;
+}
+
+.menu.active {
+    display: flex !important;
+}
+
+/* Responsive nav */
+@media (max-width: 768px) {
+    .menu {
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: none;
+    }
+
+    .menu.show {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+
+/* Buscador */
+#search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    overflow: hidden;
+    width: 500px;
+    height: 48px;
+}
+
+#search-input {
+    flex: 1;
+    border: none;
+    padding: 0 12px;
+    font-size: 16px;
+    outline: none;
+}
+
+.clear-btn {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.clear-btn:hover {
+    color: #333;
+}
+
+/* Botones de búsqueda */
+#search-btn {
+    background-color: #007aff;
+    border: none;
+    padding: 0 16px;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn svg {
+  fill: white;
+}
+
+#search-btn:hover {
+    background: #f50057;
+}
+
+/* Cards */
+#cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    width: 200px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 10px;
+}
+
+.card-content h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.card-content p {
+    font-size: 14px;
+    color: #555;
+}
+
+.card-actions {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.card-actions a {
+    color: var(--secondary);
+    font-weight: bold;
+}
+
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+th,
+td {
+    border: 1px solid #777;
+    padding: 8px;
+}
+
+th {
+    background: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background: #ffffe8;
+}
+
+tr:nth-child(odd) {
+    background: #f8f8cb;
+}
+
+/* Utilidades */
+.resaltado {
+    background: yellow;
+    font-weight: bold;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.cerrar {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#clear-button {
+    padding: 0.25rem 0.5rem;
+    font-size: 1.2rem;
+    line-height: 1;
+    z-index: 2;
+}

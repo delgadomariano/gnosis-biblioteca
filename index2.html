@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador Material Gnostico</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Responsive 
+        <nav id="navbar">
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+            <div id="menu-items" class="hidden">
+                <button id="logout">Cerrar Sesión</button>
+                <button id="logout">Cerrar Sesión</button>
+            </div>
+        </nav>
+        -->
+        <!-- Formulario de Login -->
+        <div id="login-box">
+            <h2>Bienvenido a la Biblioteca Gnóstica 2da Cámara</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Documento" required>
+                <input type="password" id="password" placeholder="Id Federacion" required>
+                
+                <p id="login-error" class="error-message"></p>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Caja de Búsqueda -->
+        <div id="search-box" style="display: none;"> 
+            <img src="https://gnosisargentina.org.ar/wp-content/uploads/2023/08/Logo-Gnosis-Argentina-fondo-blanco-300x100-1.jpg">
+
+            <form id="search-form">
+                <input type="text" id="query" placeholder="Buscar..." required>
+                <button type="submit">Buscar</button>
+            </form>
+            <div id="results"></div>
+            <div id="pagination"></div> 
+        </div>
+    </div>
+
+    <!-- Ventana Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span> 
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+            <iframe
+                id="material"
+                title="Material"> </iframe>
+            <a id="download-link" href="#" target="_blank">Ver</a>
+            
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
