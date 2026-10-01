@@ -4,111 +4,515 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Biblioteca Argentina</title>
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>Biblioteca Argentina - Portal Digital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="estilos.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css?v=20260913" />
 </head>
 
 <body>
+    <!-- Header Minimalista -->
     <header>
-         Biblioteca Gnóstica 2da Cámara
-         
-        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-        <nav class="menu"> 
-            <a href="#" id="logoutLink" style="display:none;" onclick="deslogear()">Salir</a>
-        </nav> 
-    </header> 
+        <div class="logo">
+            <img src="./material/img/iso.jpg" alt="Logo Gnosis" class="header-logo-img">
+            <span>Biblioteca Gnóstica</span>
+            <span class="logo-badge">2da Cámara</span>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()" title="Menú">
+            <i class="bi bi-list"></i>
+        </div>
+        <nav class="menu">
+            <a href="#" id="logoutLink" style="display:none;" onclick="deslogear()">
+                <i class="bi bi-box-arrow-right"></i> Salir
+            </a>
+        </nav>
+    </header>
 
-    <!-- Login -->
-    <div class="login-container" id="loginSection">
-        
-        <h2>Ingreso</h2>
+    <!-- Formulario de Acceso (Login) -->
+    <main class="login-container" id="loginSection">
+        <div class="login-header-icon" style="background: transparent;">
+            <img src="./material/img/iso.jpg" alt="Logo" style="height: 48px; width: auto; border-radius: 8px; box-shadow: var(--shadow-sm);">
+        </div>
+        <h2>Acceso</h2>
+        <p class="login-subtitle">Ingresa tus credenciales para acceder a la biblioteca</p>
+
         <form id="loginForm">
-            <input type="text" id="documento" placeholder="Documento" required />
-            <input type="text" id="usuario" placeholder="Id. Federacion" required />
-            <button type="submit" class="btn btn-primary">Ingresar</button>
+            <div class="form-group-custom">
+                <input type="text" id="documento" placeholder="Número de Documento" required autocomplete="username" />
+                <i class="bi bi-person-vcard"></i>
+            </div>
+            <div class="form-group-custom">
+                <input type="text" id="usuario" placeholder="Id. Federación" required autocomplete="current-password" />
+                <i class="bi bi-key"></i>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-box-arrow-in-right"></i> Ingresar
+            </button>
         </form>
+    </main>
 
-    </div> 
-     
-    <!-- Buscador (oculto hasta login exitoso) -->
+    <!-- Contenedor Principal / Buscador (oculto hasta login exitoso) -->
     <div class="search-container" id="searchContainer">
-        <img style="height: 90px;" src="./material/img/iso.jpg"> 
-        <br/>
-        <br/>
-        <!-- Tabs Generales -->
-        <ul class="nav nav-tabs" id="buscadorGeneralTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="especial-tab" data-bs-toggle="tab" data-bs-target="#busquedaEspecial"
-                    type="button" role="tab">Categorias</button>
-            </li>
 
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="buscador-tab" data-bs-toggle="tab" data-bs-target="#buscador"
-                    type="button" role="tab">Buscador</button>
-            </li>            
-        </ul>
+        <!-- Segmented Control / Tabs Generales -->
+        <div class="d-flex justify-content-center">
+            <ul class="nav nav-tabs" id="buscadorGeneralTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="especial-tab" data-bs-toggle="tab"
+                        data-bs-target="#busquedaEspecial" type="button" role="tab">
+                        <i class="bi bi-grid-fill"></i> Categorías
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="buscador-tab" data-bs-toggle="tab" data-bs-target="#buscador"
+                        type="button" role="tab">
+                        <i class="bi bi-search"></i> Buscador
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="favoritos-tab" data-bs-toggle="tab" data-bs-target="#seccionFavoritos"
+                        type="button" role="tab" onclick="abrirPestanaFavoritos()">
+                        <i class="bi bi-star-fill text-warning"></i> Favoritos
+                        <span class="badge bg-warning text-dark ms-1" id="favoritosCountBadge" style="display:none; font-size: 0.72rem; padding: 2px 6px; border-radius: 10px;">0</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
 
         <!-- Contenido de las solapas generales -->
-        <div class="tab-content mt-3">
-            <div class="tab-pane fade" id="buscador" role="tabpanel" aria-labelledby="buscador-tab">
-                <input type="text" id="search-input" placeholder="Buscar...">
-                <button id="search-btn" onclick="buscar()" class="btn btn-primary">Buscar</button>
+        <div class="tab-content">
 
-                <!-- Tabs -->
-                <ul class="nav nav-tabs" id="buscadorTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="resultados-tab" data-bs-toggle="tab"
-                            data-bs-target="#resultados" type="button" role="tab">Resultados</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial"
-                            type="button" role="tab">Historial</button>
-                    </li>
-                </ul>
-                <!-- Contenido de las solapas -->
-                <div class="tab-content mt-3">
-                    <div class="tab-pane fade" id="resultados" role="tabpanel"
-                        aria-labelledby="resultados-tab">
-                        <div id="results"></div>
+            <!-- Solapa Categorías -->
+            <div class="tab-pane fade show active" id="busquedaEspecial" role="tabpanel" aria-labelledby="especial-tab">
+                <div id="search-especial">
+                    <!-- Cuadrícula de Categorías -->
+                    <div id="especial-list" class="category-grid">
+
+                        <div class="category-card" onclick="buscarPorCategoria(1,1)">
+                            <div class="category-icon-wrapper icon-type-book">
+                                <i class="bi bi-book"></i>
+                            </div>
+                            <div class="category-info">
+                                <span class="category-type">Libros</span>
+                                <span class="category-author">VM Samael Aun Weor</span>
+                            </div>
+                        </div>
+
+                        <div class="category-card" onclick="buscarPorCategoria(1,2)">
+                            <div class="category-icon-wrapper icon-type-book">
+                                <i class="bi bi-book"></i>
+                            </div>
+                            <div class="category-info">
+                                <span class="category-type">Libros</span>
+                                <span class="category-author">VM Lakshmi Daimon</span>
+                            </div>
+                        </div>
+
+                        <div class="category-card" onclick="buscarPorCategoria(3,1)">
+                            <div class="category-icon-wrapper icon-type-audio">
+                                <i class="bi bi-soundwave"></i>
+                            </div>
+                            <div class="category-info">
+                                <span class="category-type">Audios</span>
+                                <span class="category-author">VM Samael Aun Weor</span>
+                            </div>
+                        </div>
+
+                        <div class="category-card" onclick="buscarPorCategoria(3,2)">
+                            <div class="category-icon-wrapper icon-type-audio">
+                                <i class="bi bi-soundwave"></i>
+                            </div>
+                            <div class="category-info">
+                                <span class="category-type">Audios</span>
+                                <span class="category-author">VM Lakshmi Daimon</span>
+                            </div>
+                        </div>
+
+                        <div class="category-card" onclick="buscarPorCategoria(2,2)">
+                            <div class="category-icon-wrapper icon-type-video">
+                                <i class="bi bi-camera-reels"></i>
+                            </div>
+                            <div class="category-info">
+                                <span class="category-type">Videos</span>
+                                <span class="category-author">VM Lakshmi Daimon</span>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="tab-pane fade" id="historial" role="tabpanel" aria-labelledby="historial-tab">
-                        <div id="search-history" class="mt-3">
-                            <ul id="history-list" class="list-group"></ul>
+
+                    <!-- Filtro en Tiempo Real de la Lista de Materiales de la Categoría -->
+                    <div id="filtroCategoriaContainer" class="search-bar-wrapper mt-4 mb-3" style="display: none;">
+                        <div class="search-input-box">
+                            <i class="bi bi-funnel"></i>
+                            <input type="text" id="filtro-categoria-input"
+                                placeholder="Filtrar materiales en esta lista..." autocomplete="off">
+                            <button type="button" id="clearFiltroBtn" class="search-clear-btn" style="display:none;"
+                                onclick="limpiarFiltroCategoria()" title="Limpiar filtro">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="tab-pane fade show active" id="busquedaEspecial" role="tabpanel" aria-labelledby="especial-tab">
-                <div id="search-especial" class="mt-3">
-                    <ul id="especial-list" class="list-group">
-                        <li class="list-group-item" onclick="buscarPorCategoria(1,1)"><i class="bi bi-book"></i> VM Samael Aun Weor</li>
-                        <li class="list-group-item" onclick="buscarPorCategoria(1,2)"><i class="bi bi-book"></i> VM Lakshmi Daimon</li>
-                        <li class="list-group-item" onclick="buscarPorCategoria(3,1)"><i class="bi bi-mic"></i> VM Samael Aun Weor</li>
-                        <li class="list-group-item" onclick="buscarPorCategoria(3,2)"><i class="bi bi-mic"></i> VM Lakshmi Daimon</li>
-                        <li class="list-group-item" onclick="buscarPorCategoria(2,2)"><i class="bi bi-camera-reels"></i> VM Lakshmi Daimon</li>
-                    </ul>
-                    <br>
+
+                    <!-- Contenedor de Resultados por Categoría -->
                     <div id="tituloResultsEspecial"></div>
                     <div id="resultsEspecial"></div>
                 </div>
             </div>
+
+            <!-- Solapa Buscador General -->
+            <div class="tab-pane fade" id="buscador" role="tabpanel" aria-labelledby="buscador-tab">
+
+                <!-- Barra de Búsqueda Spotlight -->
+                <div class="search-bar-wrapper">
+                    <div class="search-input-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="search-input" placeholder="Buscar por tema, palabra clave o frase..."
+                            autocomplete="off">
+                        <button type="button" id="clearSearchBtn" class="search-clear-btn" style="display:none;"
+                            onclick="limpiarBusquedaGeneral()" title="Limpiar búsqueda">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </button>
+                    </div>
+                    <button id="search-btn" onclick="buscar()" class="btn btn-primary">
+                        Buscar
+                    </button>
+                </div>
+
+                <!-- Sub-Tabs: Resultados e Historial -->
+                <div class="d-flex justify-content-center">
+                    <ul class="nav nav-tabs" id="buscadorTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="resultados-tab" data-bs-toggle="tab"
+                                data-bs-target="#resultados" type="button" role="tab">
+                                <i class="bi bi-list-nested"></i> Resultados
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial"
+                                type="button" role="tab">
+                                <i class="bi bi-clock-history"></i> Historial
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contenido de Solapas de Búsqueda -->
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="resultados" role="tabpanel"
+                        aria-labelledby="resultados-tab">
+                        <div id="results"></div>
+                    </div>
+                    <div class="tab-pane fade" id="historial" role="tabpanel" aria-labelledby="historial-tab">
+                        <div id="search-history" class="mt-2">
+                            <ul id="history-list"></ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Solapa Favoritos -->
+            <div class="tab-pane fade" id="seccionFavoritos" role="tabpanel" aria-labelledby="favoritos-tab">
+                <div class="favoritos-container mt-2">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                        <div class="category-header-title mb-0">
+                            <h3 class="mb-0">
+                                <i class="bi bi-star-fill text-warning"></i> Mis Favoritos
+                                <span class="badge bg-warning text-dark ms-2" id="favoritosBadgeHeader" style="font-size: 0.8rem; font-weight: 600;">0</span>
+                            </h3>
+                        </div>
+                    </div>
+
+                    <!-- Buscador interno de Favoritos -->
+                    <div class="search-bar-wrapper mb-3">
+                        <div class="search-input-box">
+                            <i class="bi bi-search"></i>
+                            <input type="text" id="filtro-favoritos-input" class="form-control"
+                                placeholder="Filtrar en mis favoritos por título, autor..."
+                                oninput="filtrarFavoritos()" />
+                            <button type="button" class="search-clear-btn" id="clearFiltroFavBtn"
+                                onclick="limpiarFiltroFavoritos()" style="display: none;" title="Limpiar filtro">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pastillas de Filtro por Tipo de Material en Favoritos -->
+                    <div class="search-filter-pills" id="favoritosFilterPills">
+                        <button type="button" class="filter-pill active" id="fav-pill-todos" onclick="filtrarPillFavoritos('todos')">
+                            <i class="bi bi-collection"></i> Todos <span class="pill-count" id="favCountTodos">0</span>
+                        </button>
+                        <button type="button" class="filter-pill" id="fav-pill-libro" onclick="filtrarPillFavoritos('libro')">
+                            <i class="bi bi-book"></i> Libros <span class="pill-count" id="favCountLibros">0</span>
+                        </button>
+                        <button type="button" class="filter-pill" id="fav-pill-audio" onclick="filtrarPillFavoritos('audio')">
+                            <i class="bi bi-soundwave"></i> Audios <span class="pill-count" id="favCountAudios">0</span>
+                        </button>
+                        <button type="button" class="filter-pill" id="fav-pill-video" onclick="filtrarPillFavoritos('video')">
+                            <i class="bi bi-camera-reels"></i> Videos <span class="pill-count" id="favCountVideos">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Contenedor de Resultados de Favoritos -->
+                    <div id="resultsFavoritos" class="mt-3">
+                        <!-- Generado dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
         </div>
 
+    </div>
 
     </div>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js"></script>
-
-    <!-- Modal -->
-    <div id="modalDetalle" class="modal">
-        <div class="modal-content" id="modalContenido"></div>
-        <span class="cerrar" onclick="cerrarModal()">×</span>
+    <!-- Modal de Detalle Estilizado -->
+    <div id="modalDetalle" class="modal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <span class="cerrar" onclick="cerrarModal()" title="Cerrar modal">
+                <i class="bi bi-x-lg"></i>
+            </span>
+            <div id="modalContenido"></div>
+        </div>
     </div>
+
+    <!-- Modal Visor de Libros / Documentos PDF -->
+    <div id="modalLectorPdf" class="pdf-modal-backdrop" role="dialog" aria-modal="true" style="display: none;">
+        <div class="pdf-modal-container" id="pdfModalContainer">
+            <!-- Barra Superior del Lector -->
+            <div class="pdf-modal-header">
+                <div class="pdf-header-title-box">
+                    <div class="pdf-header-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div class="pdf-header-meta">
+                        <h4 id="pdfModalTitulo" class="pdf-modal-title">Título del Libro</h4>
+                        <span id="pdfModalAutor" class="pdf-modal-author">Autor</span>
+                    </div>
+                </div>
+                <div class="pdf-header-actions">
+                    <button type="button" class="pdf-action-btn" onclick="toggleFullscreenPdf()"
+                        title="Pantalla completa">
+                        <i id="pdfFullscreenIcon" class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                    <button type="button" class="pdf-action-btn pdf-btn-close" onclick="cerrarLectorPdf()"
+                        title="Cerrar visor">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Área del Iframe con Loader -->
+            <div class="pdf-modal-body">
+                <div id="pdfLoadingSpinner" class="pdf-loading-overlay">
+                    <div class="spinner-minimal"></div>
+                    <span>Cargando documento...</span>
+                </div>
+                <iframe id="pdfFrame" class="pdf-iframe" src="about:blank" allow="autoplay" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Visor Integrado de Carpeta / Audios -->
+    <div id="modalAudios" class="audio-modal-backdrop" role="dialog" aria-modal="true" style="display: none;">
+        <div class="audio-modal-container" id="audioModalContainer">
+            <!-- Cabecera Superior del Visor de Audios -->
+            <div class="audio-modal-header">
+                <div class="audio-modal-header-left">
+                    <div class="pdf-header-icon" style="background-color: #f0fdf4; color: #16a34a;">
+                        <i class="bi bi-soundwave"></i>
+                    </div>
+                    <div class="audio-modal-info">
+                        <h4 id="audioModalTitulo" class="audio-modal-title">Título de la Carpeta</h4>
+                        <span id="audioModalAutor" class="audio-modal-author">Autor</span>
+                        <p id="audioModalDescripcion" class="audio-modal-desc text-muted small mt-1 mb-0" style="display:none;"></p>
+                    </div>
+                </div>
+                <div class="audio-modal-actions">
+                    <a id="audioExternalLinkBtn" href="#" target="_blank" class="pdf-action-btn"
+                        title="Abrir en ventana externa">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    <button type="button" class="pdf-action-btn" onclick="toggleFullscreenAudio()"
+                        title="Pantalla completa">
+                        <i id="audioFullscreenIcon" class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                    <button type="button" class="pdf-action-btn pdf-btn-close" onclick="cerrarModalAudios()"
+                        title="Cerrar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cuerpo del Visor -->
+            <div class="audio-modal-body">
+                <!-- Loader -->
+                <div id="audioLoadingSpinner" class="pdf-loading-overlay">
+                    <div class="spinner-minimal"></div>
+                    <span>Cargando audios de la colección...</span>
+                </div>
+
+                <!-- Lista de Archivos MP3 con reproductor individual -->
+                <div id="audioFilesContainer" class="audio-files-container">
+                    <div class="audio-files-toolbar">
+                        <span id="audioFilesCount" class="audio-files-count">0 audios disponibles</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <a id="audioOpenDriveBtn" href="#" target="_blank" class="audio-drive-pill-link">
+                                <i class="bi bi-google me-1"></i> Abrir en Google Drive
+                            </a>
+                        </div>
+                    </div>
+                    <div id="audioFilesList" class="audio-files-list">
+                        <!-- Generado dinámicamente con los mp3 -->
+                    </div>
+                </div>
+
+                <!-- Fallback / Vista Iframe de la Carpeta (oculto por defecto o visible al alternar) -->
+                <div id="audioFrameWrapper" class="audio-frame-wrapper" style="display: none;">
+                    <iframe id="audioDriveFrame" class="audio-drive-frame" src="about:blank" allow="autoplay"
+                        allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Leer Descripción Completa (Audios y Videos) -->
+    <div id="modalDetalleDescripcion" class="modal-desc-backdrop" role="dialog" aria-modal="true" style="display: none;" onclick="cerrarModalDetalleDescripcion(event)">
+        <div class="modal-desc-container" onclick="event.stopPropagation()">
+            <div class="modal-desc-header">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <i id="modalDescIcon" class="bi bi-info-circle-fill text-success fs-5 flex-shrink-0"></i>
+                    <div class="overflow-hidden">
+                        <h5 id="modalDescTitulo" class="m-0 fw-bold text-truncate" style="font-size: 1rem;">Detalles del Material</h5>
+                        <span id="modalDescAutor" class="text-muted small text-truncate d-block">Autor</span>
+                    </div>
+                </div>
+                <button type="button" class="pdf-action-btn pdf-btn-close flex-shrink-0" onclick="cerrarModalDetalleDescripcion()" title="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-desc-body" id="modalDescCuerpo">
+                <!-- Contenido de la descripción -->
+            </div>
+            <div class="modal-desc-footer">
+                <button type="button" class="btn btn-sm btn-primary px-3" onclick="cerrarModalDetalleDescripcion()">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Visor Integrado de Videos con Playlist -->
+    <div id="modalVideos" class="video-modal-backdrop" role="dialog" aria-modal="true" style="display: none;">
+        <div class="video-modal-container" id="videoModalContainer">
+            <!-- Cabecera Superior del Visor de Videos -->
+            <div class="video-modal-header">
+                <div class="video-modal-header-left">
+                    <div class="pdf-header-icon" style="background-color: #faf5ff; color: #7e22ce;">
+                        <i class="bi bi-camera-reels"></i>
+                    </div>
+                    <div class="video-modal-info">
+                        <div class="d-flex align-items-center gap-2">
+                            <h4 id="videoModalTitulo" class="video-modal-title">Título del Video</h4>
+                            <span id="videoParteBadge" class="video-part-badge">Parte 1 de 1</span>
+                        </div>
+                        <span id="videoModalAutor" class="video-modal-author">Autor</span>
+                        <p id="videoModalDescripcion" class="video-modal-desc text-muted small mt-1 mb-0" style="display:none;"></p>
+                    </div>
+                </div>
+                <div class="video-modal-actions">
+                    <button type="button" id="btnToggleVideoPlaylist" class="video-toggle-playlist-btn"
+                        onclick="toggleVideoPlaylist()" title="Mostrar u ocultar lista de reproducción">
+                        <i class="bi bi-collection-play"></i>
+                        <span id="textToggleVideoPlaylist">Lista de Partes</span>
+                    </button>
+                    <button type="button" class="pdf-action-btn" onclick="toggleFullscreenVideo()"
+                        title="Pantalla completa">
+                        <i id="videoFullscreenIcon" class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                    <button type="button" class="pdf-action-btn pdf-btn-close" onclick="cerrarModalVideos()"
+                        title="Cerrar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cuerpo del Visor: Reproductor y Playlist Lateral -->
+            <div class="video-modal-body">
+                <!-- Área Principal del Video -->
+                <div class="video-main-stage">
+                    <!-- Banner de aviso si se abre desde file:/// -->
+                    <div id="videoFileProtocolNotice"
+                        class="d-none align-items-center justify-content-between p-2 px-3 mb-2 rounded"
+                        style="background-color: #fef3c7; border: 1px solid #fde68a; color: #92400e; font-size: 0.85rem;">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-info-circle-fill text-warning fs-6"></i>
+                            <span>Abierto desde el disco (<strong>file:///</strong>): YouTube bloquea la reproducción
+                                directa por seguridad. Para reproducir dentro, ejecuta <code>iniciar_servidor.bat</code>
+                                o míralo aquí:</span>
+                        </div>
+                        <a id="videoNoticeOpenExternalBtn" href="#" target="_blank"
+                            class="btn btn-sm btn-warning text-dark fw-bold px-3 py-1 ms-2 text-nowrap"
+                            style="font-size: 0.8rem;">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Ver en YouTube
+                        </a>
+                    </div>
+
+                    <div class="video-aspect-box">
+                        <iframe id="videoPlayerFrame" class="video-iframe" src="about:blank"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                        <!-- 1. Capa superior opaca: Oculta por completo el logo del canal y el título del video -->
+                        <div class="yt-mask-top" id="ytMaskTop" title="Reproductor de video"></div>
+                        <!-- 2. Capa inferior izquierda opaca: Oculta por completo la flecha nativa de Compartir de YouTube -->
+                        <div class="yt-mask-bottom-left" id="ytMaskBottomLeft" title="Reproductor de video"></div>
+                        <!-- 3. Capa inferior derecha opaca: Oculta por completo el logo de YouTube -->
+                        <div class="yt-mask-bottom-right" id="ytMaskBottomRight" title="Reproductor de video"></div>
+                    </div>
+
+                    <!-- Barra de Navegación de la Playlist -->
+                    <div class="video-navigation-bar">
+                        <div class="video-nav-left">
+                            <button type="button" class="video-nav-btn" onclick="reproducirVideoAnterior()"
+                                title="Video anterior">
+                                <i class="bi bi-skip-backward-fill"></i> Anterior
+                            </button>
+                            <span id="videoNavCounter" class="video-nav-counter">Parte 1 / 1</span>
+                            <button type="button" class="video-nav-btn" onclick="reproducirVideoSiguiente()"
+                                title="Siguiente video">
+                                Siguiente <i class="bi bi-skip-forward-fill"></i>
+                            </button>
+                        </div>
+                        <div class="video-nav-right">
+                            <span id="videoNavTitle" class="video-nav-current-title text-muted small">Cargando
+                                video...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Lateral de Playlist -->
+                <div class="video-playlist-sidebar" id="videoPlaylistSidebar">
+                    <div class="video-playlist-header" id="videoPlaylistHeader" onclick="toggleExpandPlaylistMobile()" title="Toca para expandir o contraer la lista">
+                        <h5>
+                            <i class="bi bi-collection-play me-2"></i>Contenido del Tema
+                            <i class="bi bi-chevron-up ms-2 video-playlist-expand-icon" id="videoPlaylistExpandIcon"></i>
+                        </h5>
+                        <span id="videoPlaylistCount" class="video-playlist-badge">0 partes</span>
+                    </div>
+                    <div class="video-playlist-items" id="videoPlaylistItems">
+                        <!-- Generado dinámicamente con las partes -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="carpetas_conocidas.js"></script>
+    <script src="app.js?v=20260913"></script>
 </body>
 
 </html>
